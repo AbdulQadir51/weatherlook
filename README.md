@@ -17,4 +17,6 @@ Then you will be again presented with current and future conditions for that cit
 
 ![Screenshot 2](https://abdulqadir51.github.io/weatherlook/screenshot2.png)
 
+[Github link here](https://github.com/AbdulQadir51/weatherlook)
+
 [Deployed link here](https://abdulqadir51.github.io/weatherlook/)
