@@ -1,7 +1,10 @@
 $(function() {
     // By default load Atlanta city
-    getCurrentWeather("Atlanta")
+    getCurrentWeather("Atlanta");
+    // populate searched cities from local storage and render as buttons
+    searched_btn_list();
 });
+var cities = [];
 // openweathermap API KEY
 var apiKey_weather = 'c09649ce8ab2b228d992062f0a8f1b58'
 
@@ -13,13 +16,58 @@ $("#searchForm").submit(function(e) {
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
     // if city name is not empty
-    if (formProps.city != "")
-    // get current weather data
-        getCurrentWeather(formProps.city)
+    if (formProps.city != "") {
+        // get current weather data
+        getCurrentWeather(formProps.city);
+        // persisit search city to local storage
+        save_searched_cities(formProps.city);
+        // populate searched cities from local storage and render as buttons
+        searched_btn_list();
+
+    }
+
 });
 
 
+// to render searched cities buttons
+function searched_btn_list() {
+    var getcities = localStorage.getItem('cities')
+    if (getcities != null) {
 
+        cities = JSON.parse(getcities);
+        var markup = '';
+        $('#searched_cities').html("");
+
+        // create searched cities buttons dynamically 
+        for (let i = 0; i < cities.length; i++) {
+
+            markup += `<button class="btn btn-secondary btn-block" onclick="getCurrentWeather('${cities[i]}')" type="button">${cities[i]}</button>`
+        }
+
+        $('#searched_cities').html(markup);
+    }
+}
+
+function save_searched_cities(city) {
+    // get cities from local storage
+    var getcities = localStorage.getItem('cities')
+    if (getcities != null) {
+
+        cities = JSON.parse(getcities)
+
+        // check if city already exist in local storage then dont save it
+        if (!cities.includes(city)) {
+            cities.push(city);
+            localStorage.setItem('cities', JSON.stringify(cities));
+
+        }
+
+    } else {
+        // save first searched city to local storage
+        cities.push(city);
+        localStorage.setItem('cities', JSON.stringify(cities));
+    }
+}
 
 function getCurrentWeather(city) {
     // openweathermap API URL
